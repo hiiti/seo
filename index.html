@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Website Info Fetcher</title>
+  </head>
+  <body class="bg-gray-100 font-sans antialiased">
+    <div class="container mx-auto mt-10 px-4">
+      <div class="max-w-lg mx-auto bg-white rounded-lg shadow-lg p-8">
+        <h1 class="text-2xl font-bold text-gray-800 mb-4 text-center">Website Audit Tool</h1>
+        <form id="fetch-form">
+          <div class="mb-6">
+            <label for="url" class="block text-gray-700 font-semibold mb-2">Enter Website URL</label>
+            <input type="url" id="url" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="https://example.com" required>
+          </div>
+          <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Fetch Info</button>
+        </form>
+
+        <div id="progress-bar" class="mt-5 hidden">
+          <div class="w-full bg-gray-300 rounded-lg">
+            <div id="progress" class="bg-blue-500 text-white text-center p-1 rounded-lg" style="width: 0%;">0%</div>
+          </div>
+        </div>
+
+        <div id="result" class="mt-6 hidden">
+          <!-- Title Card -->
+          <div class="bg-white shadow-lg rounded-lg mb-4">
+            <div class="p-4 border-b border-gray-200">
+              <div class="flex items-center">
+                <i class="fas fa-heading text-blue-500 mr-2"></i>
+                <h2 class="text-lg font-semibold">Title</h2>
+              </div>
+            </div>
+            <div class="p-4">
+              <h3 id="title" class="text-xl font-semibold text-gray-800"></h3>
+              <p class="text-gray-600">Length: <span id="title-char-count"></span> characters</p>
+            </div>
+          </div>
+
+          <!-- Description Card -->
+          <div class="bg-white shadow-lg rounded-lg mb-4">
+            <div class="p-4 border-b border-gray-200">
+              <div class="flex items-center">
+                <i class="fas fa-file-alt text-green-500 mr-2"></i>
+                <h2 class="text-lg font-semibold">Description</h2>
+              </div>
+            </div>
+            <div class="p-4">
+              <p id="description" class="text-gray-800"></p>
+              <p class="text-gray-600">Length: <span id="description-char-count"></span> characters</p>
+            </div>
+          </div>
+
+          <!-- Keywords Card -->
+          <div class="bg-white shadow-lg rounded-lg mb-4">
+            <div class="p-4 border-b border-gray-200">
+              <div class="flex items-center">
+                <i class="fas fa-key text-yellow-500 mr-2"></i>
+                <h2 class="text-lg font-semibold">Keywords</h2>
+              </div>
+            </div>
+            <div class="p-4">
+              <p id="keywords" class="text-gray-800"></p>
+            </div>
+          </div>
+
+          <!-- Headings Table -->
+          <div class="bg-white shadow-lg rounded-lg mb-4">
+            <div class="p-4 border-b border-gray-200">
+              <div class="flex items-center">
+                <i class="fas fa-list text-purple-500 mr-2"></i>
+                <h2 class="text-lg font-semibold">Headings</h2>
+              </div>
+            </div>
+            <div class="p-4">
+              <table class="table-auto w-full text-left">
+                <thead>
+                  <tr class="text-gray-700">
+                    <th class="px-4 py-2">H1</th>
+                    <th class="px-4 py-2">H2</th>
+                    <th class="px-4 py-2">H3</th>
+                    <th class="px-4 py-2">H4</th>
+                    <th class="px-4 py-2">H5</th>
+                    <th class="px-4 py-2">H6</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="text-gray-600">
+                    <td id="h1-count" class="px-4 py-2"></td>
+                    <td id="h2-count" class="px-4 py-2"></td>
+                    <td id="h3-count" class="px-4 py-2"></td>
+                    <td id="h4-count" class="px-4 py-2"></td>
+                    <td id="h5-count" class="px-4 py-2"></td>
+                    <td id="h6-count" class="px-4 py-2"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Image Alt Tags Card -->
+          <div class="bg-white shadow-lg rounded-lg mb-4">
+            <div class="p-4 border-b border-gray-200">
+              <div class="flex items-center">
+                <i class="fas fa-image text-pink-500 mr-2"></i>
+                <h2 class="text-lg font-semibold">Image Alt Tags</h2>
+              </div>
+            </div>
+            <div class="p-4">
+              <p id="image-alt-tags-text" class="text-gray-800"></p>
+            </div>
+          </div>
+
+          <!-- Image Alt Tags Toggle -->
+          <div class="flex items-center mt-4">
+            <span class="text-gray-700 mr-4">Toggle Image Alt Tags</span>
+            <label class="switch">
+              <input type="checkbox" id="image-alt-tags-toggle">
+              <span class="slider round"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+     <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script>
+      document.getElementById('fetch-form').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        const url = document.getElementById('url').value;
+        const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(url);
+
+        document.getElementById('progress-bar').style.display = 'block';
+        const progressBar = document.getElementById('progress');
+
+        const updateProgress = (percentage) => {
+          progressBar.style.width = `${percentage}%`;
+          progressBar.textContent = `${percentage}%`;
+        };
+
+        try {
+          updateProgress(20);
+          const response = await fetch(proxyUrl);
+          updateProgress(50);
+          const data = await response.json();
+          updateProgress(80);
+          
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(data.contents, 'text/html');
+
+          const title = doc.querySelector('title') ? doc.querySelector('title').innerText : 'No title found';
+          const description = doc.querySelector('meta[name="description"]') ? doc.querySelector('meta[name="description"]').getAttribute('content') : 'No description found';
+          const keywords = doc.querySelector('meta[name="keywords"]') ? doc.querySelector('meta[name="keywords"]').getAttribute('content') : null;
+          const headings = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].reduce((acc, tag) => {
+            acc[tag] = doc.querySelectorAll(tag).length;
+            return acc;
+          }, {});
+
+          const images = Array.from(doc.querySelectorAll('img'));
+          const altTags = images.map(img => img.alt);
+          const altTagsWithKeywords = altTags.some(alt => keywords && alt.includes(keywords));
+
+          // Update Title
+          document.getElementById('title').textContent = title;
+          document.getElementById('title-char-count').textContent = title.length;
+          if (title.length > 60 || title.length < 25) {
+            document.getElementById('title-card').classList.add('border-danger');
+            document.getElementById('title-icon').classList.add('fa-exclamation-circle', 'text-danger');
+          } else {
+            document.getElementById('title-card').classList.add('border-success');
+            document.getElementById('title-icon').classList.add('fa-check', 'text-success');
+          }
+
+          // Update Description
+          document.getElementById('description').textContent = description;
+          document.getElementById('description-char-count').textContent = description.length;
+          if (description.length > 160 || description.length < 30) {
+            document.getElementById('description-card').classList.add('border-danger');
+            document.getElementById('description-icon').classList.add('fa-exclamation-circle', 'text-danger');
+          } else {
+            document.getElementById('description-card').classList.add('border-success');
+            document.getElementById('description-icon').classList.add('fa-check', 'text-success');
+          }
+
+                   // Update Keywords
+document.getElementById('keywords').textContent = keywords || 'No keywords found';
+if (keywords) {
+  document.getElementById('keywords-card').classList.add('border-success');
+  document.getElementById('keywords-icon').classList.add('fa-check', 'text-success');
+  document.getElementById('keywords-card').classList.remove('border-warning');
+  document.getElementById('keywords-icon').classList.remove('fa-exclamation-triangle', 'text-warning');
+} else {
+  document.getElementById('keywords-card').classList.add('border-warning');
+  document.getElementById('keywords-icon').classList.add('fa-exclamation-triangle', 'text-warning');
+  document.getElementById('keywords-card').classList.remove('border-success');
+  document.getElementById('keywords-icon').classList.remove('fa-check', 'text-success');
+}
+
+          // Update Headings
+          document.getElementById('h1-count').textContent = headings.h1;
+          document.getElementById('h2-count').textContent = headings.h2;
+          document.getElementById('h3-count').textContent = headings.h3;
+          document.getElementById('h4-count').textContent = headings.h4;
+          document.getElementById('h5-count').textContent = headings.h5;
+          document.getElementById('h6-count').textContent = headings.h6;
+
+          if (headings.h1 === 0 || headings.h1 > 1) {
+            document.getElementById('headings-card').classList.add('border-danger');
+            document.getElementById('headings-icon').classList.add('fa-exclamation-circle', 'text-danger');
+          } else {
+            document.getElementById('headings-card').classList.add('border-success');
+            document.getElementById('headings-icon').classList.add('fa-check', 'text-success');
+          }
+
+          // Update Image Alt Tags
+          const imageAltTagsText = altTagsWithKeywords ? 'Image Alt tags have keywords' : 'Images without keywords';
+          document.getElementById('image-alt-tags-text').textContent = imageAltTagsText;
+
+          if (altTagsWithKeywords) {
+            document.getElementById('image-alt-tags-card').classList.add('border-success');
+            document.getElementById('image-alt-tags-icon').classList.add('fa-check', 'text-success');
+          } else {
+            document.getElementById('image-alt-tags-card').classList.add('border-danger');
+            document.getElementById('image-alt-tags-icon').classList.add('fa-exclamation-circle', 'text-danger');
+          }
+
+          document.getElementById('result').style.display = 'block';
+          updateProgress(100);
+        } catch (error) {
+          alert('Error fetching the URL. Please try again.');
+          updateProgress(0);
+        } finally {
+          setTimeout(() => {
+            document.getElementById('progress-bar').style.display = 'none';
+            progressBar.style.width = '0%';
+            progressBar.textContent = '';
+          }, 1000);
+        }
+      });
+
+      document.getElementById('image-alt-tags-toggle').addEventListener('change', function() {
+        const imageAltTagsText = this.checked ? 'Image alt tags contain keywords' : 'Image alt tags do not contain keywords';
+        document.getElementById('image-alt-tags-text').textContent = imageAltTagsText;
+
+        if (this.checked) {
+          document.getElementById('image-alt-tags-card').classList.remove('border-danger');
+          document.getElementById('image-alt-tags-card').classList.add('border-success');
+          document.getElementById('image-alt-tags-icon').classList.remove('fa-exclamation-circle', 'text-danger');
+          document.getElementById('image-alt-tags-icon').classList.add('fa-check', 'text-success');
+        } else {
+          document.getElementById('image-alt-tags-card').classList.remove('border-success');
+          document.getElementById('image-alt-tags-card').classList.add('border-danger');
+          document.getElementById('image-alt-tags-icon').classList.remove('fa-check', 'text-success');
+          document.getElementById('image-alt-tags-icon').classList.add('fa-exclamation-circle', 'text-danger');
+        }
+      });
+    </script>
+  </body>
+</html>
